@@ -11,7 +11,7 @@ define Package/gluon-ssid-changer
   SECTION:=gluon
   CATEGORY:=Gluon
   TITLE:=SSID Changer
-  DEPENDS:=+gluon-core +kmod-batman-adv +batctl
+  DEPENDS:=+gluon-core
 endef
 
 define Build/Prepare
