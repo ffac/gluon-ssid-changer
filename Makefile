@@ -22,7 +22,7 @@ define Build/Prepar
 endef
 
 
-define Package/gluon-offline-ssid/install
+define Package/gluon-ssid-changer/install
         $(CP) ./files/* $(1)/
 endef
 
