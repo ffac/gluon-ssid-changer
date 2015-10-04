@@ -14,7 +14,7 @@ define Package/gluon-ssid-changer
   DEPENDS:=+gluon-core +kmod-batman-adv +batctl
 endef
 
-define Build/Prepar
+define Build/Prepare
         mkdir -p $(PKG_BUILD_DIR)
 endef
 
