@@ -1,6 +1,3 @@
-
-
-
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gluon-ssid-changer
