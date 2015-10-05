@@ -6,7 +6,7 @@ ONLINE_SSID='Freifunk'
 OFFLINE_PREFIX='FF_OFFLINE_' # Use something short to leave space for the nodename
 
 #Is there an active Gateway?
-GATEWAY_TQ=`batctl gwl | grep "^=>" | cut -d" " -f3 | tr -d "()"`
+GATEWAY_TQ=`batctl gwl | grep "^=>"| cut -d"(" -f2 | cut -d")" -f1 | tr -d " "`
 if [ $GATEWAY_TQ -gt 50 ];
 then
 	echo "Gateway TQ is $GATEWAY_TQ node is online"
