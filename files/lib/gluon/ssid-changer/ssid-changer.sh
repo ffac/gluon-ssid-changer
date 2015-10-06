@@ -7,7 +7,7 @@ OFFLINE_PREFIX='FF_OFFLINE_' # Use something short to leave space for the nodena
 
 # Generate an Offline SSID with the first and last Part of the nodename to allow owner to recognise wich node is down
 NODENAME=`uname -n`
-if [ ${#NODENAME} > $(30-${#OFFLINE_PREFIX}) ] ; then #32 would be possible as well
+if [ ${#NODENAME} -gt $((30 - ${#OFFLINE_PREFIX})) ] ; then #32 would be possible as well
 	HALF=$(( (28 - ${#OFFLINE_PREFIX} ) / 2 ))
 	SKIP=$(( ${#NODENAME} - $HALF ))
 	OFFLINE_SSID=$OFFLINE_PREFIX${NODENAME:0:$HALF}...${NODENAME:$SKIP:${#NODENAME}} # use the first and last part of the nodename for nodes with long name
