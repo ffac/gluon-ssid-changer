@@ -5,6 +5,16 @@
 ONLINE_SSID='Freifunk'
 OFFLINE_PREFIX='FF_OFFLINE_' # Use something short to leave space for the nodename
 
+# Generate an Offline SSID with the first and last Part of the nodename to allow owner to recognise wich node is down
+NODENAME=`uname -n`
+if [ ${#NODENAME} > 30-${#OFFLINE_PREFIX} ] ; then #32 would be possible as well
+	HALF=$(( (28 - ${#OFFLINE_PREFIX} ) / 2 ))
+	SKIP=$(( ${#NODENAME} - $HALF ))
+	OFFLINE_SSID=$OFFLINE_PREFIX${NODENAME:0:$HALF}...${NODENAME:$SKIP:${#NODENAME}} # use the first and last part of the nodename for nodes with long name
+else
+	OFFLINE_SSID=`$OFFLINE_PREFIX$NODENAME`
+fi
+
 #Is there an active Gateway?
 GATEWAY_TQ=`batctl gwl | grep "^=>"| cut -d"(" -f2 | cut -d")" -f1 | tr -d " "`
 if [ $GATEWAY_TQ -gt 50 ];
@@ -25,14 +35,6 @@ then
 	
 else
 	echo "Gateway TQ is $GATEWAY_TQ node is considered offline"
-	NODENAME=`uname -n`
-	if [ ${#NODENAME} > 30-${#OFFLINE_PREFIX} ] ; then #32 would be possible as well
-		HALF=$(( (28 - ${#OFFLINE_PREFIX} ) / 2 ))
-		SKIP=$(( ${#NODENAME} - $HALF ))
-		OFFLINE_SSID=$OFFLINE_PREFIX${NODENAME:0:$HALF}...${NODENAME:$SKIP:${#NODENAME}} # use the first and last part of the nodename for nodes with long name
-	else
-		OFFLINE_SSID=`$OFFLINE_PREFIX$NODENAME`
-	fi
 	for HOSTAPD in $(ls /var/run/hostapd-phy*); do
 		CURRENT_SSID=`grep '^ssid=' $HOSTAPD | cut -d"=" -f2`
 		if [ $CURRENT_SSID == $OFFLINE_SSID ]
