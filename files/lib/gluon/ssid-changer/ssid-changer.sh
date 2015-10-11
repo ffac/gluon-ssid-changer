@@ -31,7 +31,7 @@ then
 		CURRENT_SSID=`grep "^ssid=$OFFLINE_SSID" $HOSTAPD | cut -d"=" -f2`
 		if [ $CURRENT_SSID == $OFFLINE_SSID ]
 		then
-			echo "SSID is $CURRENT_SSID, change to $ONLINE_SSID"
+			logger -s -t "gluon-offline-ssid" -p 5 "TQ is $GATEWAY_TQ, SSID is $CURRENT_SSID, change to $ONLINE_SSID"
 			sed -i s/^ssid=$CURRENT_SSID/ssid=$ONLINE_SSID/ $HOSTAPD
 			HUP_NEEDED=1 # HUP here would be to early for dualband devices
 		else
@@ -52,7 +52,7 @@ else
 		CURRENT_SSID=`grep "^ssid=$ONLINE_SSID" $HOSTAPD | cut -d"=" -f2`                       
 		if [ $CURRENT_SSID == $ONLINE_SSID ]                                                    
 		then                                                                                  
-			echo "SSID is $CURRENT_SSID, change to $OFFLINE_SSID"                           
+			logger -s -t "gluon-offline-ssid" -p 5 "TQ is $GATEWAY_TQ, SSID is $CURRENT_SSID, change to $OFFLINE_SSID"                           
 			sed -i s/^ssid=$ONLINE_SSID/ssid=$OFFLINE_SSID/ $HOSTAPD                           
 			HUP_NEEDED=1 # HUP here would be to early for dualband devices                  
 		else                                                                                    
