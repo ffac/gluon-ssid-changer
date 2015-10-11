@@ -16,7 +16,7 @@ else
 fi
 
 #Is there an active Gateway?
-GATEWAY_TQ=`batctl gwl | grep "^=>"| cut -d"(" -f2 | cut -d")" -f1 | tr -d " "`
+GATEWAY_TQ=`batctl gwl | grep "^=>" | awk -F'[()]' '{print $2}'| tr -d " "`
 if [ $GATEWAY_TQ -gt 50 ];
 then
 	echo "Gateway TQ is $GATEWAY_TQ node is online"
