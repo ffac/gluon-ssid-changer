@@ -5,6 +5,10 @@
 ONLINE_SSID='Freifunk'
 OFFLINE_PREFIX='FF_OFFLINE_' # Use something short to leave space for the nodename
 
+UPPER_LIMIT='55' #Above this limit the online SSID will be used
+LOWER_LIMIT='45' #Below this limit the offline SSID will be used
+# In-between these two values the SSID will never be changed to preven it from toggeling every Minute.
+
 # Generate an Offline SSID with the first and last Part of the nodename to allow owner to recognise wich node is down
 NODENAME=`uname -n`
 if [ ${#NODENAME} -gt $((30 - ${#OFFLINE_PREFIX})) ] ; then #32 would be possible as well
@@ -17,7 +21,7 @@ fi
 
 #Is there an active Gateway?
 GATEWAY_TQ=`batctl gwl | grep "^=>" | awk -F'[()]' '{print $2}'| tr -d " "`
-if [ $GATEWAY_TQ -gt 55 ];
+if [ $GATEWAY_TQ -gt $UPPER_LIMIT ];
 then
 	echo "Gateway TQ is $GATEWAY_TQ node is online"
 	for HOSTAPD in $(ls /var/run/hostapd-phy*); do
@@ -39,7 +43,7 @@ then
 		fi
 	done
 fi
-if [ $GATEWAY_TQ -lt 45 ];
+if [ $GATEWAY_TQ -lt $LOWER_LIMIT ];
 then
 	echo "Gateway TQ is $GATEWAY_TQ node is considered offline"
 	for HOSTAPD in $(ls /var/run/hostapd-phy*); do
@@ -61,7 +65,7 @@ then
 		fi 
 	done
 fi
-if [ $GATEWAY_TQ -ge 45 -a $GATEWAY_TQ -le 55 ];
+if [ $GATEWAY_TQ -ge $LOWER_LIMIT -a $GATEWAY_TQ -le $UPPER_LIMIT ];
 	echo "TQ is $GATEWAY_TQ, do nothing"
 	HUP_NEEDED=9
 
