@@ -17,7 +17,7 @@ fi
 
 #Is there an active Gateway?
 GATEWAY_TQ=`batctl gwl | grep "^=>" | awk -F'[()]' '{print $2}'| tr -d " "`
-if [ $GATEWAY_TQ -gt 50 ];
+if [ $GATEWAY_TQ -gt 55 ];
 then
 	echo "Gateway TQ is $GATEWAY_TQ node is online"
 	for HOSTAPD in $(ls /var/run/hostapd-phy*); do
@@ -38,8 +38,9 @@ then
 			echo "There is something wrong, did not find SSID $ONLINE_SSID or $OFFLINE_SSID"
 		fi
 	done
-	
-else
+fi
+if [ $GATEWAY_TQ -lt 45 ];
+then
 	echo "Gateway TQ is $GATEWAY_TQ node is considered offline"
 	for HOSTAPD in $(ls /var/run/hostapd-phy*); do
 		CURRENT_SSID=`grep "^ssid=$OFFLINE_SSID" $HOSTAPD | cut -d"=" -f2`
@@ -60,6 +61,10 @@ else
 		fi 
 	done
 fi
+if [ $GATEWAY_TQ -ge 45 -a $GATEWAY_TQ -le 55 ];
+	echo "TQ is $GATEWAY_TQ, do nothing"
+	HUP_NEEDED=9
+
 
 if [ $HUP_NEEDED == 1 ]; then
 	killall -HUP hostapd # Send HUP to all hostapd um die neue SSID zu laden
