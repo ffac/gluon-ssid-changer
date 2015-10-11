@@ -43,6 +43,7 @@ then
 		fi
 	done
 fi
+
 if [ $GATEWAY_TQ -lt $LOWER_LIMIT ];
 then
 	echo "Gateway TQ is $GATEWAY_TQ node is considered offline"
@@ -65,10 +66,12 @@ then
 		fi
 	done
 fi
-if [ $GATEWAY_TQ -ge $LOWER_LIMIT -a $GATEWAY_TQ -le $UPPER_LIMIT ]; #This is just get a clean run if we are in-between the grace periode
-	echo "TQ is $GATEWAY_TQ, do nothing"
-	HUP_NEEDED=0 
 
+if [ $GATEWAY_TQ -ge $LOWER_LIMIT -a $GATEWAY_TQ -le $UPPER_LIMIT ]; #This is just get a clean run if we are in-between the grace periode
+then
+	echo "TQ is $GATEWAY_TQ, do nothing"
+	HUP_NEEDED=0
+fi
 
 if [ $HUP_NEEDED == 1 ]; then
 	killall -HUP hostapd # Send HUP to all hostapd um die neue SSID zu laden
