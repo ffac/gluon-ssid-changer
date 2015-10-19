@@ -5,11 +5,12 @@ Script to change the SSID when there is no suffic sufficient connection to the s
 
 It is quite basic, it just checks the Quality of the Connection and decides if a change of the SSID is necessary.
 
-Add the following lines to the modules file in your gluon directory:
+Create a file "modules" with the following content in your <a href="https://github.com/ffac/site/tree/offline-ssid"> site directory:</a>
 
-PACKAGES_SSIDCHANGER_REPO=https://github.com/ffac/gluon-ssid-changer.git
-PACKAGES_SSIDCHANGER_COMMIT=06bdf6fc6149af9cbb4564aac82cadd56a98a8b2
-
-Add ssidchanger to GLUON_FEEDS at the top of the modules file.
+> GLUON_SITE_FEEDS="ssidchanger"
+> PACKAGES_SSIDCHANGER_REPO=https://github.com/ffac/gluon-ssid-changer.git
+> PACKAGES_SSIDCHANGER_COMMIT=06bdf6fc6149af9cbb4564aac82cadd56a98a8b2
 
 With this done you can add the package gluon-ssid-changer to your site.mk
+
+This skript is tested with Gluon 2015.2.1
