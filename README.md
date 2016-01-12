@@ -9,8 +9,8 @@ Create a file "modules" with the following content in your <a href="https://gith
 
 GLUON_SITE_FEEDS="ssidchanger"<br>
 PACKAGES_SSIDCHANGER_REPO=https://github.com/ffac/gluon-ssid-changer.git<br>
-PACKAGES_SSIDCHANGER_COMMIT=0f354f7220bd86636472d0ac800343582b3e7497<br>
+PACKAGES_SSIDCHANGER_COMMIT=e756679307ed5f9008b0e4ac1a486a67ca08719c<br>
 
 With this done you can add the package gluon-ssid-changer to your site.mk
 
-This skript is tested with Gluon 2015.2.1 and the current master (upcoming 2016.1)
+This branch of the skript contains the the ssid-changer version for the current master based on openwrt chaos-calmer (upcoming 2016.1)
