@@ -11,7 +11,7 @@ define Package/gluon-ssid-changer
   SECTION:=gluon
   CATEGORY:=Gluon
   TITLE:=SSID Changer
-  DEPENDS:=+gluon-core
+  DEPENDS:=+gluon-core +micrond
 endef
 
 define Build/Prepare
