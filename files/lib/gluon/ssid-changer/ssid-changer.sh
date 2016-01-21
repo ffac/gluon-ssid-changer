@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # At first some Definitions:
-ONLINE_SSID=$(uci get wireless.client_radio0.ssid)
+ONLINE_SSID=$(uci get wireless.client_radio0.ssid -q)
 : ${ONLINE_SSID:=FREIFUNK}   # if for whatever reason ONLINE_SSID is NULL
 OFFLINE_PREFIX='FF_OFFLINE_' # Use something short to leave space for the nodename
 
