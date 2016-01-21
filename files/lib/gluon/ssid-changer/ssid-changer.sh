@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # At first some Definitions:
-
-ONLINE_SSID='Freifunk'
+ONLINE_SSID=$(uci get wireless.client_radio0.ssid -q)
+: ${ONLINE_SSID:=FREIFUNK}   # if for whatever reason ONLINE_SSID is NULL
 OFFLINE_PREFIX='FF_OFFLINE_' # Use something short to leave space for the nodename
 
 UPPER_LIMIT='55' #Above this limit the online SSID will be used
