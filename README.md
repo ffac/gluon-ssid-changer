@@ -9,7 +9,7 @@ Create a file "modules" with the following content in your <a href="https://gith
 
 GLUON_SITE_FEEDS="ssidchanger"<br>
 PACKAGES_SSIDCHANGER_REPO=https://github.com/ffac/gluon-ssid-changer.git<br>
-PACKAGES_SSIDCHANGER_COMMIT=0f354f7220bd86636472d0ac800343582b3e7497<br>
+PACKAGES_SSIDCHANGER_COMMIT=d5067d92203aac3726faceb19fa8720251cb0603<br>
 
 With this done you can add the package gluon-ssid-changer to your site.mk
 
