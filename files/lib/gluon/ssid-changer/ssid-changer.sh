@@ -6,8 +6,8 @@ ONLINE_SSID=$(uci get wireless.client_radio0.ssid -q)
 : ${ONLINE_SSID:=FREIFUNK}   # if for whatever reason ONLINE_SSID is NULL
 OFFLINE_PREFIX='FF_OFFLINE_' # Use something short to leave space for the nodename
 
-UPPER_LIMIT='41' #Above this limit the online SSID will be used
-LOWER_LIMIT='35' #Below this limit the offline SSID will be used
+UPPER_LIMIT='30' #Above this limit the online SSID will be used
+LOWER_LIMIT='20' #Below this limit the offline SSID will be used
 # In-between these two values the SSID will never be changed to preven it from toggeling every Minute.
 
 # Generate an Offline SSID with the first and last Part of the nodename to allow owner to recognise wich node is down
