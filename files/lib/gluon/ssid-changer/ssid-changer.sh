@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # maximum simplyfied, no more ttvn rating
-check=$(batctl -H|wc -l)
+check=$(batctl -H gwl|wc -l)
 name=$(nodename status|tail -c 21)
 OFFLINE_PREFIX="FF_OFFLINE_"
 default="freiburg.freifunk.net"
