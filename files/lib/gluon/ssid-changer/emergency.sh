@@ -14,7 +14,7 @@ echo 950 > /proc/$(pgrep /usr/sbin/batadv-vis)/oom_score_adj # batvis
 # if we see bat GW just exit
 netz=$(batctl gwl -H|wc -l)
 if [ $netz -ne 0 ] ; then 
-        logger "emergency found network, exiting"
+        echo "$0 found GW in network, exiting"|logger
         echo 0 > /tmp/emergency
         exit 0
 fi
@@ -27,7 +27,11 @@ touch /tmp/emergency
 counter=$(cat /tmp/emergency)
 if [ -z $counter ] ; then counter=0 ; fi
 if [ $counter -lt 10 ]
-        then let counter+=1; echo $counter > /tmp/emergency 
+        then 
+		let counter+=1
+		echo $counter > /tmp/emergency
+		if [ $counter -eq 5 ]; then echo "$0 - 5 min offline - try wifi"|logger; wifi ; fi
+		if [ $counter -eq 7 ]; then echo "$0 - 7 min offline - try restart fastd"|logger; /etc/init.d/fastd restart ; fi
         else reboot
 fi 
 echo $counter
