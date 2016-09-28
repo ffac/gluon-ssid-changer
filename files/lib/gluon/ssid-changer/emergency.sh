@@ -1,9 +1,13 @@
 #!/bin/sh
 
 # set some sysctl
+# see kernel.org/doc/Documentation/sysctl/vm.txt
 sysctl -w vm.panic_on_oom=0 # deact reboot on oom
 sysctl -w kernel.panic=80 # 80s after panic reboot
 sysctl -w vm.overcommit_memory=2 # calc if enough mem is avail mmaloc
+echo 100 > /proc/sys/vm/overcommit_ratio # max % useable mem
+echo 0 > /proc/sys/vm/user_reserve_kbytes # only root need reserve
+echo 128 > /proc/sys/vm/lowmem_reserve_ratio
 
 # raise prob. of proc to kill
 # echo 10 > /proc/$(cat /var/run/fastd.mesh_vpn.pid)/oom_adj # deprecated
@@ -30,9 +34,9 @@ if [ $counter -lt 10 ]
         then 
 		let counter+=1
 		echo $counter > /tmp/emergency
-		if [ $counter -eq 5 ]; then echo "$0 - 5 min offline - try wifi"|logger; wifi ; fi
-		if [ $counter -eq 7 ]; then echo "$0 - 7 min offline - try restart fastd"|logger; /etc/init.d/fastd restart ; fi
+		if [ $counter -eq 3 ]; then echo "$0 - 3 min offline - try wifi"|logger; wifi ; fi
+		if [ $counter -eq 5 ]; then echo "$0 - 5 min offline - try restart fastd"|logger; /etc/init.d/fastd restart ; fi
+		if [ $counter -eq 7 ]; then echo "$0 - 5 min offline - try restart network"|logger; /etc/init.d/network restart ; fi
         else reboot
 fi 
 echo $counter
-
