@@ -2,12 +2,12 @@
 
 # set some sysctl
 # see kernel.org/doc/Documentation/sysctl/vm.txt
-sysctl -w vm.panic_on_oom=0 # deact reboot on oom
-sysctl -w kernel.panic=80 # 80s after panic reboot
-sysctl -w vm.overcommit_memory=2 # calc if enough mem is avail mmaloc
-echo 100 > /proc/sys/vm/overcommit_ratio # max % useable mem
-echo 0 > /proc/sys/vm/user_reserve_kbytes # only root need reserve
-echo 128 > /proc/sys/vm/lowmem_reserve_ratio
+# sysctl -w vm.panic_on_oom=0 # deact reboot on oom
+# sysctl -w kernel.panic=80 # 80s after panic reboot
+# sysctl -w vm.overcommit_memory=2 # calc if enough mem is avail mmaloc
+# echo 100 > /proc/sys/vm/overcommit_ratio # max % useable mem
+# echo 0 > /proc/sys/vm/user_reserve_kbytes # only root need reserve
+# echo 128 > /proc/sys/vm/lowmem_reserve_ratio
 
 # raise prob. of proc to kill
 # echo 10 > /proc/$(cat /var/run/fastd.mesh_vpn.pid)/oom_adj # deprecated
