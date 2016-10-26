@@ -18,7 +18,7 @@ echo 950 > /proc/$(pgrep /usr/sbin/batadv-vis)/oom_score_adj # batvis
 # if we see bat GW just exit
 netz=$(batctl gwl -H|grep -v "gateways in range"|wc -l)
 if [ $netz -ne 0 ] ; then 
-        echo "$0 found GW in network, exiting"|logger
+        echo "$0 found GW in network, exiting"
         echo 0 > /tmp/emergency
         exit 0
 fi
