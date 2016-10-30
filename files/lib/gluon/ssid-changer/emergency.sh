@@ -17,7 +17,7 @@ echo 950 > /proc/$(pgrep /usr/sbin/batadv-vis)/oom_score_adj # batvis
 
 # if we see bat GW just exit
 netz=$(batctl gwl -H|grep -v "gateways in range"|wc -l)
-if [ $netz -ne 0 ] ; then 
+if [ $netz -ne 0 ] ; then
         echo "$0 found GW in network, exiting"
         echo 0 > /tmp/emergency
         exit 0
@@ -26,17 +26,17 @@ fi
 # see ath9k for stopped
 # cat /sys/kernel/debug/ieee80211/phy0/ath9k/queues
 
-# simple counter 
+# simple counter
 touch /tmp/emergency
 counter=$(cat /tmp/emergency)
 if [ -z $counter ] ; then counter=0 ; fi
 if [ $counter -lt 10 ]
-        then 
+        then
 		let counter+=1
 		echo $counter > /tmp/emergency
 		if [ $counter -eq 3 ]; then echo "$0 - 3 min offline - try wifi"|logger; wifi ; fi
 		if [ $counter -eq 5 ]; then echo "$0 - 5 min offline - try restart fastd"|logger; /etc/init.d/fastd restart ; fi
-		if [ $counter -eq 7 ]; then echo "$0 - 5 min offline - try restart network"|logger; /etc/init.d/network restart ; fi
+		if [ $counter -eq 7 ]; then echo "$0 - 7 min offline - try restart network"|logger; /etc/init.d/network restart ; fi
         else reboot
-fi 
+fi
 echo $counter
