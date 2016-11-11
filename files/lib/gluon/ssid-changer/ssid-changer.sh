@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # at first some Definitions:
-MINUTES=1440 # only once every this timeframe the SSID will change to OFFLINE
+MINUTES=1440 # only once every timeframe the SSID will change to OFFLINE (set to 1 minute to change every time the router gets offline)
 OFFLINE_PREFIX='FF_OFFLINE_' # use something short to leave space for the nodename (no '~' allowed!)
 
 ONLINE_SSID=$(uci get wireless.client_radio0.ssid -q)
