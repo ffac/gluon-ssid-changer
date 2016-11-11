@@ -4,7 +4,7 @@
 check=$(batctl gwl -H|grep -v "gateways in range"|wc -l)
 name=$(nodename status|tail -c 21)
 offline="FF_OFFLINE_"
-default="freiburg.freifunk.net"
+default="FREIFUNK"
 offi=$offline$name
 
 if [ $check -eq 0 ] ; then
