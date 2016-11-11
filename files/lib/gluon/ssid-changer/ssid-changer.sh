@@ -17,7 +17,7 @@ fi
 if [ $check -gt 0 ] ; then
         if [ "$(uci get wireless.client_radio0.ssid)" == "$default" ] ; then echo "$0 - still on $default" ; exit 0 ; fi
         echo "$0 change ssid to $default"| logger
-        uci set wireless.client_radio0.ssid=freiburg.freifunk.net
+        uci set wireless.client_radio0.ssid="$default"
 	sed -i s/^ssid=$offi/ssid=$default/ /var/run/hostapd-phy0.conf
         killall -HUP hostapd
 fi
