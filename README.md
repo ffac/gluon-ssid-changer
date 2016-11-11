@@ -6,8 +6,8 @@ This script changes the SSID when there is no connection to the selected Gateway
 Once a minute it checks if there is a gateway reacheable with `batctl gwl -H` and
 decides if a change of the SSID is necessary.
 
-*It is a simplified rewrite of https://github.com/ffac/gluon-ssid-changer that doesn't check
-the tx value any more. It is in use in Freifunk Freiburg*
+*It is a fork of https://github.com/ffac/gluon-ssid-changer that doesn't check
+the tx value any more. It will be in use in Freifunk Nord*
 
 Gluon versions
 ==============
