@@ -3,7 +3,7 @@
 # at first some Definitions:
 ONLINE_SSID=$(uci get wireless.client_radio0.ssid -q)
 : ${ONLINE_SSID:="FREIFUNK"} # if for whatever reason ONLINE_SSID is NULL
-OFFLINE_PREFIX='FF_OFFLINE_' # use something short to leave space for the nodename
+OFFLINE_PREFIX='FF_OFFLINE_' # use something short to leave space for the nodename (no '~' allowed!)
 
 # Generate an Offline SSID with the first and last part of the nodename to allow owner to recognise wich node is down
 NODENAME=`uname -n`
@@ -21,13 +21,13 @@ if [ $CHECK -eq 0 ] ; then
   if [ "$(uci get wireless.client_radio0.ssid)" == "$OFFLINE_SSID" ] ; then echo "$0 - still on $OFFLINE_SSID" ; exit 0 ; fi
   echo "$0 change ssid to $OFFLINE_SSID" | logger
   uci set wireless.client_radio0.ssid="$OFFLINE_SSID"
-  sed -i s/^ssid=$ONLINE_SSID/ssid=$OFFLINE_SSID/ /var/run/hostapd-phy0.conf
+  sed -i s~^ssid=$ONLINE_SSID~ssid=$OFFLINE_SSID~ /var/run/hostapd-phy0.conf
   killall -HUP hostapd
 fi
 if [ $CHECK -gt 0 ] ; then
   if [ "$(uci get wireless.client_radio0.ssid)" == "$ONLINE_SSID" ] ; then echo "$0 - still on $ONLINE_SSID" ; exit 0 ; fi
   echo "$0 change ssid to $ONLINE_SSID"| logger
   uci set wireless.client_radio0.ssid="$ONLINE_SSID"
-  sed -i s/^ssid=$OFFLINE_SSID/ssid=$ONLINE_SSID/ /var/run/hostapd-phy0.conf
+  sed -i s~^ssid=$OFFLINE_SSID~ssid=$ONLINE_SSID~ /var/run/hostapd-phy0.conf
   killall -HUP hostapd
 fi
