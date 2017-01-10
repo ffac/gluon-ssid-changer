@@ -21,7 +21,7 @@ else
 fi
 
 #Is there an active Gateway?
-GATEWAY_TQ=`batctl gwl | grep "^=>" | awk -F'[()]' '{print $2}'| tr -d " "` #Grep the Connection Quality of the Gateway which is currently used
+GATEWAY_TQ=`batctl gwl | grep -e "^=>" -e "^\*" | awk -F'[()]' '{print $2}'| tr -d " "` #Grep the Connection Quality of the Gateway which is currently used
 
 if [ ! $GATEWAY_TQ ]; #If there is no gateway there will be errors in the following if clauses
 then
