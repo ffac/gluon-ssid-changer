@@ -1,7 +1,9 @@
 #!/bin/sh
 
-# at first some Definitions:
-
+# At first some Definitions:
+MINUTES=1 # only once every timeframe the SSID will change to OFFLINE
+# set to 1 minute to change every time the router gets offline
+# set to 1440 to only check once a day
 ONLINE_SSID=$(uci get wireless.client_radio0.ssid -q)
 : ${ONLINE_SSID:=FREIFUNK}   # if for whatever reason ONLINE_SSID is NULL
 OFFLINE_PREFIX='FF_OFFLINE_' # use something short to leave space for the nodename (no '~' allowed!)
@@ -54,24 +56,26 @@ fi
 if [ $GATEWAY_TQ -lt $LOWER_LIMIT ];
 then
 	echo "Gateway TQ is $GATEWAY_TQ node is considered offline"
-	for HOSTAPD in $(ls /var/run/hostapd-phy*); do # check status for all physical devices
-		CURRENT_SSID="$(grep "^ssid=$OFFLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
-		if [ "$CURRENT_SSID" == "$OFFLINE_SSID" ]
-		then
-			echo "SSID $CURRENT_SSID is correct, noting to do"
-			HUP_NEEDED=0
-			break
-		fi
-		CURRENT_SSID="$(grep "^ssid=$ONLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
-		if [ "$CURRENT_SSID" == "$ONLINE_SSID" ]
-		then
-			logger -s -t "gluon-offline-ssid" -p 5 "TQ is $GATEWAY_TQ, SSID is $CURRENT_SSID, change to $OFFLINE_SSID"
-			sed -i "s~^ssid=$ONLINE_SSID~ssid=$OFFLINE_SSID~" $HOSTAPD
-			HUP_NEEDED=1 # HUP here would be too early for dualband devices
-		else
-			echo "There is something wrong: did neither find SSID '$ONLINE_SSID' nor '$OFFLINE_SSID'"
-		fi
-	done
+	if [ $(expr $(date "+%s") / 60 % $MINUTES) -eq 0 ]; then
+		for HOSTAPD in $(ls /var/run/hostapd-phy*); do # check status for all physical devices
+			CURRENT_SSID="$(grep "^ssid=$OFFLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
+			if [ "$CURRENT_SSID" == "$OFFLINE_SSID" ]
+			then
+				echo "SSID $CURRENT_SSID is correct, noting to do"
+				HUP_NEEDED=0
+				break
+			fi
+			CURRENT_SSID="$(grep "^ssid=$ONLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
+			if [ "$CURRENT_SSID" == "$ONLINE_SSID" ]
+			then
+				logger -s -t "gluon-offline-ssid" -p 5 "TQ is $GATEWAY_TQ, SSID is $CURRENT_SSID, change to $OFFLINE_SSID"
+				sed -i "s~^ssid=$ONLINE_SSID~ssid=$OFFLINE_SSID~" $HOSTAPD
+				HUP_NEEDED=1 # HUP here would be too early for dualband devices
+			else
+				echo "There is something wrong: did neither find SSID '$ONLINE_SSID' nor '$OFFLINE_SSID'"
+			fi
+		done
+	fi
 fi
 
 if [ $GATEWAY_TQ -ge $LOWER_LIMIT -a $GATEWAY_TQ -le $UPPER_LIMIT ]; # this is just get a clean run if we are in-between the grace periode
