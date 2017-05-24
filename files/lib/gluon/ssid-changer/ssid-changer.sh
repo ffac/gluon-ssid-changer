@@ -1,16 +1,13 @@
 #!/bin/sh
 
-# at first some Definitions:
 MINUTES=1440 # only once every timeframe the SSID will change to OFFLINE (set to 1 minute to change every time the router gets offline)
+FIRST=5 # the first few minutes directly after reboot within which an Offline-SSID always may be activated
 OFFLINE_PREFIX='FF_OFFLINE_' # use something short to leave space for the nodename (no '~' allowed!)
-
-# if the router started less than 10 minutes ago, exit
-[ $(cat /proc/uptime | sed 's/\..*//g') -gt 600 ] || exit
 
 ONLINE_SSID="$(uci get wireless.client_radio0.ssid -q)"
 : ${ONLINE_SSID:="FREIFUNK"} # if for whatever reason ONLINE_SSID is NULL
 
-# Generate an Offline SSID with the first and last part of the nodename to allow owner to recognise wich node is down
+# generate an Offline SSID with the first and last part of the nodename to allow owner to recognise wich node is down
 NODENAME="$(uname -n)"
 if [ ${#NODENAME} -gt $((30 - ${#OFFLINE_PREFIX})) ]; then # 32 would be possible as well
 	HALF=$(( (28 - ${#OFFLINE_PREFIX} ) / 2 )) # calculate the length of the first part of the node identifier in the offline-ssid
@@ -27,13 +24,13 @@ if [ $CHECK -gt 0 ]; then
 	echo "node is online"
 	for HOSTAPD in $(ls /var/run/hostapd-phy*); do # check status for all physical devices
 	CURRENT_SSID="$(grep "^ssid=$ONLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
-	if [ "$CURRENT_SSID" == "$ONLINE_SSID" ]
+	if [ "$CURRENT_SSID" = "$ONLINE_SSID" ]
 	then
-		echo "SSID $CURRENT_SSID is correct, noting to do"
+		echo "SSID $CURRENT_SSID is correct, nothing to do"
 		break
 	fi
 	CURRENT_SSID="$(grep "^ssid=$OFFLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
-	if [ "$CURRENT_SSID" == "$OFFLINE_SSID" ]; then
+	if [ "$CURRENT_SSID" = "$OFFLINE_SSID" ]; then
 		logger -s -t "gluon-offline-ssid" -p 5 "SSID is $CURRENT_SSID, change to $ONLINE_SSID"
 		sed -i "s~^ssid=$CURRENT_SSID~ssid=$ONLINE_SSID~" $HOSTAPD
 		HUP_NEEDED=1 # HUP here would be to early for dualband devices
@@ -43,15 +40,16 @@ if [ $CHECK -gt 0 ]; then
 done
 elif [ $CHECK -eq 0 ]; then
 	echo "node is considered offline"
-	if [ $(expr $(date "+%s") / 60 % $MINUTES) -eq 0 ]; then
+	UP=$(cat /proc/uptime | sed 's/\..*//g')
+	if [ $(($UP / 60)) -lt $FIRST ] || [ $(($UP / 60 % $MINUTES)) -eq 0 ]; then
 		for HOSTAPD in $(ls /var/run/hostapd-phy*); do
   		CURRENT_SSID="$(grep "^ssid=$OFFLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
-  		if [ "$CURRENT_SSID" == "$OFFLINE_SSID" ]; then
-  			echo "SSID $CURRENT_SSID is correct, noting to do"
+  		if [ "$CURRENT_SSID" = "$OFFLINE_SSID" ]; then
+  			echo "SSID $CURRENT_SSID is correct, nothing to do"
   			break
   		fi
   		CURRENT_SSID="$(grep "^ssid=$ONLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
-  		if [ "$CURRENT_SSID" == "$ONLINE_SSID" ]; then
+  		if [ "$CURRENT_SSID" = "$ONLINE_SSID" ]; then
   			logger -s -t "gluon-offline-ssid" -p 5 "SSID is $CURRENT_SSID, change to $OFFLINE_SSID"
   			sed -i "s~^ssid=$ONLINE_SSID~ssid=$OFFLINE_SSID~" $HOSTAPD
   			HUP_NEEDED=1
@@ -62,7 +60,7 @@ elif [ $CHECK -eq 0 ]; then
 	fi
 fi
 
-if [ $HUP_NEEDED == 1 ]; then
+if [ $HUP_NEEDED = 1 ]; then
 	killall -HUP hostapd # send HUP to all hostapd to load the new SSID
 	HUP_NEEDED=0
 	echo "HUP!"
