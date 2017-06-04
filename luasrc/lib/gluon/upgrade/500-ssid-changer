@@ -1,0 +1,23 @@
+#!/usr/bin/lua
+
+local site = require 'gluon.site_config'
+
+local legacy_uci = require 'luci.model.uci'
+local uci = legacy_uci.cursor()
+
+-- LEDE: local uci = require('simple-uci').cursor()
+
+if not uci:get('ssid-changer', 'settings', 'enabled') then
+uci:section('ssid-changer', 'main', 'settings', {
+  enabled           = '1',
+  switch_timeframe  = site.switch_timeframe or '1',
+  first             = site.first or '5',
+  prefix            = site.prefix or 'FF_OFFLINE_',
+  suffix            = site.suffix or 'nodename',
+  tq_limit_enabled  = site.tq_limit_enabled or '0',
+  tq_limit_max      = site.tq_limit_max or '55',
+  tq_limit_min      = site.tq_limit_min or '45',
+})
+end
+
+uci:save('ssid-changer')

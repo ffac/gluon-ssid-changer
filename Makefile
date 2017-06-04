@@ -31,10 +31,12 @@ define Build/Configure
 endef
 
 define Build/Compile
+	$(call GluonSrcDiet,./luasrc,$(PKG_BUILD_DIR)/luadest/)
 endef
 
 define Package/gluon-ssid-changer/install
 	$(CP) ./files/* $(1)/
+	$(CP) $(PKG_BUILD_DIR)/luadest/* $(1)/
 	./gluonShellDiet.sh $(1)/lib/gluon/ssid-changer/ssid-changer.sh
 endef
 
