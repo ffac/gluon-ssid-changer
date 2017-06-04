@@ -4,6 +4,12 @@ MINUTES=1440 # only once every timeframe the SSID will change to OFFLINE (set to
 FIRST=5 # the first few minutes directly after reboot within which an Offline-SSID always may be activated
 OFFLINE_PREFIX='FF_OFFLINE_' # use something short to leave space for the nodename (no '~' allowed!)
 
+if [ "$(uci get ssid-changer.settings.enabled -q)" = '0' ]; then 
+	DISABLED='1'
+else
+	DISABLED='0'
+fi
+
 ONLINE_SSID="$(uci get wireless.client_radio0.ssid -q)"
 : ${ONLINE_SSID:="FREIFUNK"} # if for whatever reason ONLINE_SSID is NULL
 
@@ -18,9 +24,9 @@ else
 fi
 
 # maximum simplified, no more ttvn rating
-CHECK=$(batctl gwl -H|grep -v "gateways in range"|wc -l)
+CHECK="$(batctl gwl -H|grep -v "gateways in range"|wc -l)"
 HUP_NEEDED=0
-if [ $CHECK -gt 0 ]; then
+if [ "$CHECK" -gt 0 ] || [ "$DISABLED" = '1' ]; then
 	echo "node is online"
 	for HOSTAPD in $(ls /var/run/hostapd-phy*); do # check status for all physical devices
 	CURRENT_SSID="$(grep "^ssid=$ONLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
@@ -38,7 +44,7 @@ if [ $CHECK -gt 0 ]; then
 		echo "There is something wrong, did not find SSID $ONLINE_SSID or $OFFLINE_SSID"
 	fi
 done
-elif [ $CHECK -eq 0 ]; then
+elif [ "$CHECK" -eq 0 ]; then
 	echo "node is considered offline"
 	UP=$(cat /proc/uptime | sed 's/\..*//g')
 	if [ $(($UP / 60)) -lt $FIRST ] || [ $(($UP / 60 % $MINUTES)) -eq 0 ]; then
