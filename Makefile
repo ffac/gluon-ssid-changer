@@ -9,10 +9,10 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/gluon-ssid-changer
-  SECTION:=gluon
-  CATEGORY:=Gluon
-  TITLE:=changes the SSID to an Offline-SSID so clients don't connect to an offline WiFi
-  DEPENDS:=+gluon-core +micrond
+	SECTION:=gluon
+	CATEGORY:=Gluon
+	TITLE:=changes the SSID to an Offline-SSID so clients don't connect to an offline WiFi
+	DEPENDS:=+gluon-core +micrond
 endef
 
 define Package/gluon-ssid-changer/description
@@ -24,7 +24,7 @@ define Package/gluon-ssid-changer/description
 endef
 
 define Build/Prepare
-  mkdir -p $(PKG_BUILD_DIR)
+	mkdir -p $(PKG_BUILD_DIR)
 endef
 
 define Build/Configure
@@ -34,7 +34,8 @@ define Build/Compile
 endef
 
 define Package/gluon-ssid-changer/install
-  $(CP) ./files/* $(1)/
+	$(CP) ./files/* $(1)/
+	./gluonShellDiet.sh $(1)/lib/gluon/ssid-changer/ssid-changer.sh
 endef
 
 $(eval $(call BuildPackage,gluon-ssid-changer))
