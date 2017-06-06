@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gluon-ssid-changer
-PKG_VERSION:=2
+PKG_VERSION:=3
 PKG_RELEASE:=$(GLUON_BRANCH)
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
-include $(INCLUDE_DIR)/package.mk
+include $(GLUONDIR)/include/package.mk
 
 define Package/gluon-ssid-changer
 	SECTION:=gluon
@@ -38,6 +38,11 @@ define Package/gluon-ssid-changer/install
 	$(CP) ./files/* $(1)/
 	$(CP) $(PKG_BUILD_DIR)/luadest/* $(1)/
 	./gluonShellDiet.sh $(1)/lib/gluon/ssid-changer/ssid-changer.sh
+endef
+
+define Package/gluon-ssid-changer/postinst
+#!/bin/sh
+$(call GluonCheckSite,check_site.lua)
 endef
 
 $(eval $(call BuildPackage,gluon-ssid-changer))
