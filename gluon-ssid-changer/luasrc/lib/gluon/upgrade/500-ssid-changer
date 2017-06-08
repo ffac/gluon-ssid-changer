@@ -7,13 +7,13 @@ local uci = require('simple-uci').cursor()
 if not uci:get('ssid-changer', 'settings', 'enabled') then
 uci:section('ssid-changer', 'main', 'settings', {
   enabled           = '1',
-  switch_timeframe  = site.switch_timeframe or '1',
-  first             = site.first or '5',
-  prefix            = site.prefix or 'FF_OFFLINE_',
-  suffix            = site.suffix or 'nodename',
-  tq_limit_enabled  = site.tq_limit_enabled or '0',
-  tq_limit_max      = site.tq_limit_max or '55',
-  tq_limit_min      = site.tq_limit_min or '45',
+  switch_timeframe  = site.ssid_changer.switch_timeframe or '1',
+  first             = site.ssid_changer.first or '5',
+  prefix            = site.ssid_changer.prefix or 'FF_OFFLINE_',
+  suffix            = site.ssid_changer.suffix or 'nodename',
+  tq_limit_enabled  = site.ssid_changer.tq_limit_enabled or '0',
+  tq_limit_max      = site.ssid_changer.tq_limit_max or '55',
+  tq_limit_min      = site.ssid_changer.tq_limit_min or '45',
 })
 end
 
