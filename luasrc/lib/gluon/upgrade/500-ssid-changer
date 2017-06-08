@@ -2,10 +2,7 @@
 
 local site = require 'gluon.site_config'
 
-local legacy_uci = require 'luci.model.uci'
-local uci = legacy_uci.cursor()
-
--- LEDE: local uci = require('simple-uci').cursor()
+local uci = require('simple-uci').cursor()
 
 if not uci:get('ssid-changer', 'settings', 'enabled') then
 uci:section('ssid-changer', 'main', 'settings', {

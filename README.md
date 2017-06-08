@@ -54,7 +54,7 @@ disable it with:
 Gluon versions
 ==============
 This branch of the script contains the ssid-changer version for the gluon 
-2016.2.x.
+master branch (lede).
 
 Implement this package in your firmware
 =======================================
