@@ -1,25 +1,25 @@
 #!/bin/sh
 
 # only once every timeframe the SSID will change to OFFLINE (set to 1 minute to change every time the router gets offline)
-MINUTES="$(uci get ssid-changer.settings.switch_timeframe -q)"
+MINUTES="$(uci -q get ssid-changer.settings.switch_timeframe)"
 # the first few minutes directly after reboot within which an Offline-SSID always may be activated
 : ${MINUTES:=1}
 
-FIRST="$(uci get ssid-changer.settings.first -q)"
+FIRST="$(uci -q get ssid-changer.settings.first)"
 # use something short to leave space for the nodename (no '~' allowed!)
 : ${FIRST:=5}
 
-PREFIX="$(uci get ssid-changer.settings.prefix -q)"
+PREFIX="$(uci -q get ssid-changer.settings.prefix)"
 # generate the ssid with either 'nodename', 'mac' or to use only the prefix: 'none'
 : ${PREFIX:='FF_OFFLINE_'}
 
-if [ "$(uci get ssid-changer.settings.enabled -q)" = '0' ]; then 
+if [ "$(uci -q get ssid-changer.settings.enabled)" = '0' ]; then 
 	DISABLED='1'
 else
 	DISABLED='0'
 fi
 
-SETTINGS_SUFFIX="$(uci get ssid-changer.settings.suffix -q)"
+SETTINGS_SUFFIX="$(uci -q get ssid-changer.settings.suffix)"
 
 if [ $SETTINGS_SUFFIX = 'nodename' ]; then
 	SUFFIX="$(uname -n)"
@@ -33,7 +33,7 @@ if [ $SETTINGS_SUFFIX = 'nodename' ]; then
 		SUFFIX=${SUFFIX:0:$HALF}...${SUFFIX:$SKIP:${#SUFFIX}}
 	fi
 elif [ $SETTINGS_SUFFIX = 'mac' ]; then
-	SUFFIX="$(uci get network.bat0.macaddr -q)"
+	SUFFIX="$(uci -q get network.bat0.macaddr)"
 else
 	# 'none'
 	SUFFIX=''
@@ -43,7 +43,7 @@ OFFLINE_SSID="$PREFIX$SUFFIX"
 
 # TODO: ffac tq limits has to be implemented here if enabled
 
-ONLINE_SSID="$(uci get wireless.client_radio0.ssid -q)"
+ONLINE_SSID="$(uci -q get wireless.client_radio0.ssid)"
 # if for whatever reason ONLINE_SSID is NULL
 : ${ONLINE_SSID:="FREIFUNK"}
 
