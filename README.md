@@ -22,7 +22,6 @@ ssid_changer = {
   tq_limit_enabled = 0,   -- if false, the offline SSID will only be set if there is no gateway reacheable
                           -- upper and lower limit to turn the offline_ssid on and off
                           -- in-between these two values the SSID will never be changed to prevent it from toggeling every minute.
-                          -- TODO: enabled=1 still has to be implemented
   tq_limit_max = '55',    -- upper limit, above that the online SSID will be used
   tq_limit_min = '45'     -- lower limit, below that the offline SSID will be used
 },
