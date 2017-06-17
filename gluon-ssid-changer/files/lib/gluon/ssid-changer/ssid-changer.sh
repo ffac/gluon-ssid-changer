@@ -1,5 +1,16 @@
 #!/bin/sh
 
+#################
+# safety checks #
+#################
+safety_exit() {
+	echo $1, exiting with error code 2
+	exit 2
+}
+pgrep -f autoupdater >/dev/null && safety_exit 'autoupdater running'
+[ $(cat /proc/uptime | sed 's/\..*//g') -gt 60 ] || safety_exit 'less than one minute'
+[ $(find /var/run -name hostapd-phy* | wc -l) -lt 0 ] || safety_exit 'no hostapd-phy*'
+	
 # only once every timeframe the SSID will change to OFFLINE (set to 1 minute to change every time the router gets offline)
 MINUTES="$(uci -q get ssid-changer.settings.switch_timeframe)"
 # the first few minutes directly after reboot within which an Offline-SSID always may be activated
