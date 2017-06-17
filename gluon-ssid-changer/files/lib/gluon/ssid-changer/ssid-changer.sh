@@ -82,18 +82,17 @@ if [ $TQ_LIMIT_ENABLED = 1 ]; then
 	
 	MSG="TQ is $GATEWAY_TQ, "
 	
-	if [ $GATEWAY_TQ -gt $TQ_LIMIT_MAX ]; then
+	if [ $GATEWAY_TQ -ge $TQ_LIMIT_MAX ]; then
 		CHECK=1
 	elif [ $GATEWAY_TQ -lt $TQ_LIMIT_MIN ]; then
 		CHECK=0
 	else
 		# this is just get a clean run if we are in-between the grace periode
 		echo "TQ is $GATEWAY_TQ, do nothing"
-		exit
+		exit 0
 	fi
 else
 	MSG=""
-	
 	CHECK="$(batctl gwl -H|grep -v "gateways in range"|wc -l)"
 fi
 
