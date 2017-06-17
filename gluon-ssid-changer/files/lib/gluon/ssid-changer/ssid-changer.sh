@@ -67,10 +67,10 @@ TQ_LIMIT_ENABLED="$(uci -q get ssid-changer.settings.tq_limit_enabled)"
 if [ $TQ_LIMIT_ENABLED = 1 ]; then
 	TQ_LIMIT_MAX="$(uci -q get ssid-changer.settings.tq_limit_max)"
 	#  upper limit, above that the online SSID will be used
-	: ${TQ_LIMIT_MAX:='55'}
+	: ${TQ_LIMIT_MAX:='45'}
 	TQ_LIMIT_MIN="$(uci -q get ssid-changer.settings.tq_limit_min)"
 	#  lower limit, below that the offline SSID will be used
-	: ${TQ_LIMIT_MIN:='45'}
+	: ${TQ_LIMIT_MIN:='35'}
 	# grep the connection quality of the currently used gateway
 	GATEWAY_TQ=$(batctl gwl | grep -e "^=>" -e "^\*" | awk -F '[('')]' '{print $2}' | tr -d " ")
 	if [ ! $GATEWAY_TQ ]; then
