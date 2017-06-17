@@ -56,9 +56,15 @@ fi
 
 OFFLINE_SSID="$PREFIX$SUFFIX"
 
-ONLINE_SSID="$(uci -q get wireless.client_radio0.ssid)"
 # if for whatever reason ONLINE_SSID is NULL
+ONLINE_SSID="$(uci -q get wireless.client_radio0.ssid)"
 : ${ONLINE_SSID:="FREIFUNK"}
+
+# temp file to count the offline incidents during switch_timeframe
+TMP=/tmp/ssid-changer-count
+if [ ! -f $TMP ]; then echo "0">$TMP; fi
+OFF_COUNT=$(cat $TMP)
+echo "$(($OFF_COUNT + 1))" > $TMP
 
 TQ_LIMIT_ENABLED="$(uci -q get ssid-changer.settings.tq_limit_enabled)"
 # if true, the offline ssid will only be set if there is no gateway reacheable
@@ -96,6 +102,8 @@ else
 	CHECK="$(batctl gwl -H|grep -v "gateways in range"|wc -l)"
 fi
 
+UP=$(($(cat /proc/uptime | sed 's/\..*//g') / 60))
+M=$(($UP % $MINUTES))
 
 HUP_NEEDED=0
 if [ "$CHECK" -gt 0 ] || [ "$DISABLED" = '1' ]; then
@@ -109,6 +117,7 @@ if [ "$CHECK" -gt 0 ] || [ "$DISABLED" = '1' ]; then
 		fi
 		CURRENT_SSID="$(grep "^ssid=$OFFLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
 		if [ "$CURRENT_SSID" = "$OFFLINE_SSID" ]; then
+			# set online
 			logger -s -t "gluon-ssid-changer" -p 5 $MSG"SSID is $CURRENT_SSID, change to $ONLINE_SSID"
 			sed -i "s~^ssid=$CURRENT_SSID~ssid=$ONLINE_SSID~" $HOSTAPD
 			# HUP here would be to early for dualband devices
@@ -119,24 +128,36 @@ if [ "$CHECK" -gt 0 ] || [ "$DISABLED" = '1' ]; then
 	done
 elif [ "$CHECK" -eq 0 ]; then
 	echo "node is considered offline"
-	UP=$(cat /proc/uptime | sed 's/\..*//g')
-	if [ $(($UP / 60)) -lt $FIRST ] || [ $(($UP / 60 % $MINUTES)) -eq 0 ]; then
-		for HOSTAPD in $(ls /var/run/hostapd-phy*); do
-			CURRENT_SSID="$(grep "^ssid=$OFFLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
-			if [ "$CURRENT_SSID" = "$OFFLINE_SSID" ]; then
-				echo "SSID $CURRENT_SSID is correct, nothing to do"
-				break
-			fi
-			CURRENT_SSID="$(grep "^ssid=$ONLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
-			if [ "$CURRENT_SSID" = "$ONLINE_SSID" ]; then
-				logger -s -t "gluon-ssid-changer" -p 5 $MSG"SSID is $CURRENT_SSID, change to $OFFLINE_SSID"
-				sed -i "s~^ssid=$ONLINE_SSID~ssid=$OFFLINE_SSID~" $HOSTAPD
-				HUP_NEEDED=1
-			else
-				logger -s -t "gluon-ssid-changer" -p 5 "could not set to offline state: did neither find SSID '$ONLINE_SSID' nor '$OFFLINE_SSID'. Please reboot"
-			fi
-		done
+	if [ $UP -lt $FIRST ] || [ $M -eq 0 ]; then
+		# set SSID offline, only if uptime is less than FIRST or exactly a multiplicative of switch_timeframe
+		if [ $UP -lt $FIRST ]; then 
+			T=$FIRST
+		else
+			T=$MINUTES
+		fi
+		#echo minute $M, check if $OFF_COUNT is more than half of $T 
+		if [ $OFF_COUNT -ge $(($T / 2)) ]; then
+			# node was offline more times than half of switch_timeframe (or than $FIRST)
+			for HOSTAPD in $(ls /var/run/hostapd-phy*); do
+				CURRENT_SSID="$(grep "^ssid=$OFFLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
+				if [ "$CURRENT_SSID" = "$OFFLINE_SSID" ]; then
+					echo "SSID $CURRENT_SSID is correct, nothing to do"
+					break
+				fi
+				CURRENT_SSID="$(grep "^ssid=$ONLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
+				if [ "$CURRENT_SSID" = "$ONLINE_SSID" ]; then
+					# set offline
+					logger -s -t "gluon-ssid-changer" -p 5 $MSG"$OFF_COUNT times offline, SSID is $CURRENT_SSID, change to $OFFLINE_SSID"
+					sed -i "s~^ssid=$ONLINE_SSID~ssid=$OFFLINE_SSID~" $HOSTAPD
+					HUP_NEEDED=1
+				else
+					logger -s -t "gluon-ssid-changer" -p 5 "could not set to offline state: did neither find SSID '$ONLINE_SSID' nor '$OFFLINE_SSID'. Please reboot"
+				fi
+			done
+		fi
+		#else echo minute $M, just count $OFF_COUNT
 	fi
+	echo "$(($OFF_COUNT + 1))">$TMP
 fi
 
 if [ $HUP_NEEDED = 1 ]; then
@@ -144,4 +165,9 @@ if [ $HUP_NEEDED = 1 ]; then
 	killall -HUP hostapd
 	HUP_NEEDED=0
 	echo "HUP!"
+fi
+
+if [ $M -eq 0 ]; then
+	# set counter to 0 if the timeframe is over
+	echo "0">$TMP
 fi
