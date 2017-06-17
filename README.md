@@ -49,6 +49,30 @@ disable it with:
 
     uci set ssid-changer.settings.enabled='0'
 
+Manual installation
+===================
+
+If you don't have ssid-changer in your firmware, you can still install it manually on a node:
+
+```
+DEFAULT_TIMEFRAME=3
+LOGIN='your:node::ip6'
+LOGIN="root@[$ROUTER_IP]"
+git clone https://github.com/Freifunk-Nord/gluon-ssid-changer.git ssid-changer
+cd ssid-changer/gluon-ssid-changer/
+scp -r files/* $LOGIN:/
+scp luasrc/lib/gluon/upgrade/500-ssid-changer $LOGIN:/lib/gluon/upgrade/
+ssh $ROUTER_IP "/lib/gluon/upgrade/500-ssid-changer;" \
+  "uci set ssid-changer.settings.switch_timeframe='$DEFAULT_TIMEFRAME';" \
+  "uci commit ssid-changer;" \
+  "uci show ssid-changer;"
+```
+
+logread |grep -v "fastd" & logread -f |grep -v "fastd"
+
+cd /var/www/freifunk/firmware/ffki/rc/
+router_ip+=fda1:384a:74de:4242:62e3:27ff:fe2a:67d6;
+
 
 Gluon versions
 ==============
