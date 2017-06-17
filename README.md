@@ -12,10 +12,10 @@ Adapt and add this block to your site.conf:
 
 ```
 ssid_changer = {
-  switch_timeframe = 1,   -- only once every timeframe (in minutes) the SSID will change to OFFLINE 
+  switch_timeframe = 30,  -- only once every timeframe (in minutes) the SSID will change to OFFLINE 
                           -- set to 1440 to change once a day
                           -- set to 1 minute to change every time the router gets offline
-  first = 5,              -- the first few minutes directly after reboot within which an Offline-SSID always may be activated
+  first = 5,              -- the first few minutes directly after reboot within which an Offline-SSID always may be activated (must be <= switch_timeframe)
   prefix = 'FF_OFFLINE_', -- use something short to leave space for the nodename (no '~' allowed!)
   suffix = 'nodename',    -- generate the SSID with either 'nodename', 'mac' or to use only the prefix: 'none'
   

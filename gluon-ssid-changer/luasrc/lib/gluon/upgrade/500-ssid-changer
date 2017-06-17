@@ -7,7 +7,7 @@ local uci = require('simple-uci').cursor()
 if not uci:get('ssid-changer', 'settings', 'enabled') then
 uci:section('ssid-changer', 'main', 'settings', {
   enabled           = '1',
-  switch_timeframe  = site.ssid_changer.switch_timeframe or '1',
+  switch_timeframe  = site.ssid_changer.switch_timeframe or '30',
   first             = site.ssid_changer.first or '5',
   prefix            = site.ssid_changer.prefix or 'FF_OFFLINE_',
   suffix            = site.ssid_changer.suffix or 'nodename',

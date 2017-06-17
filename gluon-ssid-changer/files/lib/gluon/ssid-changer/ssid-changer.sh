@@ -11,17 +11,19 @@ pgrep -f autoupdater >/dev/null && safety_exit 'autoupdater running'
 [ $(cat /proc/uptime | sed 's/\..*//g') -gt 60 ] || safety_exit 'less than one minute'
 [ $(find /var/run -name hostapd-phy* | wc -l) -lt 0 ] || safety_exit 'no hostapd-phy*'
 	
-# only once every timeframe the SSID will change to OFFLINE (set to 1 minute to change every time the router gets offline)
+# only once every timeframe minutes the SSID will change to OFFLINE
+# (set to 1 minute to change immediately every time the router gets offline)
 MINUTES="$(uci -q get ssid-changer.settings.switch_timeframe)"
-# the first few minutes directly after reboot within which an Offline-SSID always may be activated
-: ${MINUTES:=1}
+: ${MINUTES:=30}
 
+# the first few minutes directly after reboot within which an Offline-SSID always may be activated
+# (must be <= switch_timeframe)
 FIRST="$(uci -q get ssid-changer.settings.first)"
-# use something short to leave space for the nodename (no '~' allowed!)
 : ${FIRST:=5}
 
+# the Offline-SSID will start with this prefix use something short to leave space for the nodename
+# (no '~' allowed!)
 PREFIX="$(uci -q get ssid-changer.settings.prefix)"
-# the Offline-SSID will start with this prefix
 : ${PREFIX:='FF_OFFLINE_'}
 
 if [ "$(uci -q get ssid-changer.settings.enabled)" = '0' ]; then 
@@ -30,8 +32,8 @@ else
 	DISABLED='0'
 fi
 
-SETTINGS_SUFFIX="$(uci -q get ssid-changer.settings.suffix)"
 # generate the ssid with either 'nodename', 'mac' or to use only the prefix set to 'none'
+SETTINGS_SUFFIX="$(uci -q get ssid-changer.settings.suffix)"
 : ${SETTINGS_SUFFIX:='nodename'}
 
 if [ $SETTINGS_SUFFIX = 'nodename' ]; then
