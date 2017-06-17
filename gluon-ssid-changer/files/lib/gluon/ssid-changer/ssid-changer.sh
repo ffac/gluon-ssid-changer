@@ -9,7 +9,7 @@ safety_exit() {
 }
 pgrep -f autoupdater >/dev/null && safety_exit 'autoupdater running'
 [ $(cat /proc/uptime | sed 's/\..*//g') -gt 60 ] || safety_exit 'less than one minute'
-[ $(find /var/run -name hostapd-phy* | wc -l) -lt 0 ] || safety_exit 'no hostapd-phy*'
+[ $(find /var/run -name hostapd-phy* | wc -l) -gt 0 ] || safety_exit 'no hostapd-phy*'
 	
 # only once every timeframe minutes the SSID will change to OFFLINE
 # (set to 1 minute to change immediately every time the router gets offline)
