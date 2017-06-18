@@ -4,17 +4,18 @@ local site = require 'gluon.site_config'
 
 local uci = require('simple-uci').cursor()
 
-if not uci:get('ssid-changer', 'settings', 'enabled') then
-uci:section('ssid-changer', 'main', 'settings', {
-  enabled           = '1',
-  switch_timeframe  = site.ssid_changer.switch_timeframe or '30',
-  first             = site.ssid_changer.first or '5',
-  prefix            = site.ssid_changer.prefix or 'FF_OFFLINE_',
-  suffix            = site.ssid_changer.suffix or 'nodename',
-  tq_limit_enabled  = site.ssid_changer.tq_limit_enabled or '0',
-  tq_limit_max      = site.ssid_changer.tq_limit_max or '45',
-  tq_limit_min      = site.ssid_changer.tq_limit_min or '35',
-})
+if site.ssid_changer == nil then
+	-- print('ssid_changer not defined in site.conf')
+elseif not uci:get('ssid-changer', 'settings', 'enabled') then
+	uci:section('ssid-changer', 'main', 'settings', {
+		enabled           = '1',
+		switch_timeframe  = site.ssid_changer.switch_timeframe or '30',
+		first             = site.ssid_changer.first or '5',
+		prefix            = site.ssid_changer.prefix or 'FF_OFFLINE_',
+		suffix            = site.ssid_changer.suffix or 'nodename',
+		tq_limit_enabled  = site.ssid_changer.tq_limit_enabled or '0',
+		tq_limit_max      = site.ssid_changer.tq_limit_max or '45',
+		tq_limit_min      = site.ssid_changer.tq_limit_min or '35',
+	})
+	uci:save('ssid-changer')
 end
-
-uci:save('ssid-changer')
