@@ -52,10 +52,10 @@ disable it with:
 Manual installation
 ===================
 
-If you don't have ssid-changer in your firmware, you can still install it manually on a node:
+If you don't have ssid-changer in your firmware, you can still install it
+manually on a node and set the desired settings that should differ from default:
 
 ```
-DEFAULT_TIMEFRAME=3
 ROUTER_IP='your:node::ip6'
 LOGIN="root@[$ROUTER_IP]"
 git clone https://github.com/Freifunk-Nord/gluon-ssid-changer.git ssid-changer
@@ -64,7 +64,8 @@ git checkout lede
 scp -r files/* $LOGIN:/
 scp luasrc/lib/gluon/upgrade/500-ssid-changer $LOGIN:/lib/gluon/upgrade/
 ssh $ROUTER_IP "/lib/gluon/upgrade/500-ssid-changer;" \
-  "uci set ssid-changer.settings.switch_timeframe='$DEFAULT_TIMEFRAME';" \
+  "uci set ssid-changer.settings.switch_timeframe='3';" \
+  "uci set ssid-changer.settings.first='3';" \
   "uci commit ssid-changer;" \
   "uci show ssid-changer;" \
   "/etc/init.d/micrond reload;"
