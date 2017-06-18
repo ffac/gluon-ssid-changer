@@ -56,10 +56,11 @@ If you don't have ssid-changer in your firmware, you can still install it manual
 
 ```
 DEFAULT_TIMEFRAME=3
-LOGIN='your:node::ip6'
+ROUTER_IP='your:node::ip6'
 LOGIN="root@[$ROUTER_IP]"
 git clone https://github.com/Freifunk-Nord/gluon-ssid-changer.git ssid-changer
 cd ssid-changer/gluon-ssid-changer/
+git checkout lede
 scp -r files/* $LOGIN:/
 scp luasrc/lib/gluon/upgrade/500-ssid-changer $LOGIN:/lib/gluon/upgrade/
 ssh $ROUTER_IP "/lib/gluon/upgrade/500-ssid-changer;" \
