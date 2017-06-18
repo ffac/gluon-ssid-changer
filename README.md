@@ -66,7 +66,8 @@ scp luasrc/lib/gluon/upgrade/500-ssid-changer $LOGIN:/lib/gluon/upgrade/
 ssh $ROUTER_IP "/lib/gluon/upgrade/500-ssid-changer;" \
   "uci set ssid-changer.settings.switch_timeframe='$DEFAULT_TIMEFRAME';" \
   "uci commit ssid-changer;" \
-  "uci show ssid-changer;"
+  "uci show ssid-changer;" \
+  "/etc/init.d/micrond reload;"
 ```
 
 logread |grep -v "fastd" & logread -f |grep -v "fastd"
