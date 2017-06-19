@@ -103,12 +103,14 @@ Create a file "modules" with the following content in your site directory:
 ```
 GLUON_SITE_FEEDS="ssidchanger"
 PACKAGES_SSIDCHANGER_REPO=https://github.com/freifunk-nord/gluon-ssid-changer.git
-PACKAGES_SSIDCHANGER_COMMIT=614d2f5ac45a424057d7171f80716acf6cad63e1 # <-- set the newest commit ID here
+PACKAGES_SSIDCHANGER_COMMIT=0e4c3384a51c7359234ae883f00e47b044a0c704 # <-- set the newest commit ID here
 PACKAGES_SSIDCHANGER_BRANCH=master
 ```
 
 With this done you can add the package `gluon-ssid-changer` to your `site.mk`
 
-
-*This is a fork of https://github.com/ffac/gluon-ssid-changer that doesn't check
+History
+=======
+*This is a merge of https://github.com/ffac/gluon-ssid-changer and
+https://github.com/viisauksena/gluon-ssid-changer that doesn't check
 the tx value any more. It is now in use in Freifunk Nord*
