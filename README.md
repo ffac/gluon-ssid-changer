@@ -1,8 +1,13 @@
 gluon-ssid-changer
 ==================
 
-This package adds a script, that changes the SSID when there is no connection to
-the selected Gateway.
+This package adds a script to change the SSID to an Offline-SSID when there is
+no connection to any gateway.
+This SSID can be generated from the nodes hostname with the first
+and last part of the nodename or the mac address, to allow observers to 
+recognise which node is down. The script is called once a minute by micron.d
+and it will change from online to offline-SSID maximum once every (definable)
+timeframe.
 
 You can enable/disable it in the config mode.
 

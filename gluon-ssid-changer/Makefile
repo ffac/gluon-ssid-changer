@@ -7,6 +7,9 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(TOPDIR)/../package/gluon.mk
 
+PKG_CONFIG_DEPENDS += $(GLUON_I18N_CONFIG)
+
+
 define Package/gluon-ssid-changer
 	SECTION:=gluon
 	CATEGORY:=Gluon
@@ -31,6 +34,7 @@ define Build/Configure
 endef
 
 define Build/Compile
+	$(call GluonBuildI18N,gluon-ssid-changer,i18n)
 	$(call GluonSrcDiet,./luasrc,$(PKG_BUILD_DIR)/luadest/)
 endef
 
@@ -38,6 +42,7 @@ define Package/gluon-ssid-changer/install
 	$(CP) ./files/* $(1)/
 	$(CP) $(PKG_BUILD_DIR)/luadest/* $(1)/
 	./gluonShellDiet.sh $(1)/lib/gluon/ssid-changer/ssid-changer.sh
+	$(call GluonInstallI18N,gluon-ssid-changer,$(1))
 endef
 
 define Package/gluon-ssid-changer/postinst

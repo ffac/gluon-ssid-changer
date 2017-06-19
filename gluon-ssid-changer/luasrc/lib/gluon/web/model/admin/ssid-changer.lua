@@ -20,14 +20,14 @@ function f:write()
 	if enabled.data then
 		uci:section('ssid-changer', 'settings', 'settings', {
 			enabled = '1',
-      -- prefix = prefix.data
-      -- switch_timeframe = switch_timeframe.data or '1440'
-      -- tq_limit_max = tq_limit_max.data or '55'
-      -- first = first.data or '5'
-      -- prefix = prefix.data or 'FF_OFFLINE_'
-      -- suffix = suffix.data or 'nodename'
-      -- tq_limit_min = tq_limit_min.data or '45'
-      -- tq_limit_enabled = tq_limit_enabled.data or '0'
+			-- prefix = prefix.data
+			-- switch_timeframe = switch_timeframe.data or '1440'
+			-- tq_limit_max = tq_limit_max.data or '55'
+			-- first = first.data or '5'
+			-- prefix = prefix.data or 'FF_OFFLINE_'
+			-- suffix = suffix.data or 'nodename'
+			-- tq_limit_min = tq_limit_min.data or '45'
+			-- tq_limit_enabled = tq_limit_enabled.data or '0'
 		})
 	else
 		uci:set('ssid-changer', 'settings', 'enabled', '0')
