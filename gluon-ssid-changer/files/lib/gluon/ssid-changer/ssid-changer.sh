@@ -11,7 +11,7 @@ pgrep -f autoupdater >/dev/null && safety_exit 'autoupdater running'
 [ $(cat /proc/uptime | sed 's/\..*//g') -gt 60 ] || safety_exit 'less than one minute'
 [ $(find /var/run -name hostapd-phy* | wc -l) -gt 0 ] || safety_exit 'no hostapd-phy*'
 	
-# only once every timeframe minutes the SSID will change to OFFLINE
+# only once every timeframe minutes the SSID will change to the Offline-SSID
 # (set to 1 minute to change immediately every time the router gets offline)
 MINUTES="$(uci -q get ssid-changer.settings.switch_timeframe)"
 : ${MINUTES:=30}
@@ -24,7 +24,7 @@ FIRST="$(uci -q get ssid-changer.settings.first)"
 # the Offline-SSID will start with this prefix use something short to leave space for the nodename
 # (no '~' allowed!)
 PREFIX="$(uci -q get ssid-changer.settings.prefix)"
-: ${PREFIX:='FF_OFFLINE_'}
+: ${PREFIX:='FF_Offline_'}
 
 if [ "$(uci -q get ssid-changer.settings.enabled)" = '0' ]; then 
 	DISABLED='1'

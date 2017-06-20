@@ -11,7 +11,7 @@ elseif not uci:get('ssid-changer', 'settings', 'enabled') then
 		enabled           = '1',
 		switch_timeframe  = site.ssid_changer.switch_timeframe or '30',
 		first             = site.ssid_changer.first or '5',
-		prefix            = site.ssid_changer.prefix or 'FF_OFFLINE_',
+		prefix            = site.ssid_changer.prefix or 'FF_Offline_',
 		suffix            = site.ssid_changer.suffix or 'nodename',
 		tq_limit_enabled  = site.ssid_changer.tq_limit_enabled or '0',
 		tq_limit_max      = site.ssid_changer.tq_limit_max or '45',

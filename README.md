@@ -25,7 +25,7 @@ selected two algorithms to analyze if a gateway is reacheable:
 Depending on the connectivity, it will be decided if a change of the SSID is 
 necessary: There is a variable `switch_timeframe` (for ex.  1440 = 24h) that 
 defines a time interval after which a successful check that detects an offline
-state will result in a single change of the SSID to "FF_OFFLINE_$node_hostname".
+state will result in a single change of the SSID to "FF_Offline_$node_hostname".
 Only the first few minutes (also definable in a variable `first`) the 
 OFFLINE_SSID may also be set. All other minutes a checks will just be counted
 and reported in the log and whenever an online state is detected the SSID will
@@ -40,11 +40,11 @@ Adapt and add this block to your site.conf:
 
 ```
 ssid_changer = {
-  switch_timeframe = 30,  -- only once every timeframe (in minutes) the SSID will change to OFFLINE 
+  switch_timeframe = 30,  -- only once every timeframe (in minutes) the SSID will change to the Offline-SSID
                           -- set to 1440 to change once a day
                           -- set to 1 minute to change every time the router gets offline
   first = 5,              -- the first few minutes directly after reboot within which an Offline-SSID always may be activated (must be <= switch_timeframe)
-  prefix = 'FF_OFFLINE_', -- use something short to leave space for the nodename (no '~' allowed!)
+  prefix = 'FF_Offline_', -- use something short to leave space for the nodename (no '~' allowed!)
   suffix = 'nodename',    -- generate the SSID with either 'nodename', 'mac' or to use only the prefix: 'none'
   
   tq_limit_enabled = 0,   -- if false, the offline SSID will only be set if there is no gateway reacheable

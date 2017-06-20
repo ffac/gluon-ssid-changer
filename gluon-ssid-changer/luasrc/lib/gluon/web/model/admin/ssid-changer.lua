@@ -4,7 +4,7 @@ local util = require 'gluon.util'
 local f = Form(translate('Offline-SSID'))
 
 local s = f:section(Section, nil, translate(
-	'Here you can enable to automatically change the SSID to the OFFLINE-SSID '
+	'Here you can enable to automatically change the SSID to the Offline-SSID '
   .. 'when the node has no connection to the selected Gateway.'
 ))
 
@@ -24,7 +24,7 @@ function f:write()
 			-- switch_timeframe = switch_timeframe.data or '1440'
 			-- tq_limit_max = tq_limit_max.data or '55'
 			-- first = first.data or '5'
-			-- prefix = prefix.data or 'FF_OFFLINE_'
+			-- prefix = prefix.data or 'FF_Offline_'
 			-- suffix = suffix.data or 'nodename'
 			-- tq_limit_min = tq_limit_min.data or '45'
 			-- tq_limit_enabled = tq_limit_enabled.data or '0'
