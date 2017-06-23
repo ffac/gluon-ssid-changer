@@ -90,12 +90,6 @@ ssh $ROUTER_IP "/lib/gluon/upgrade/500-ssid-changer;" \
   "/etc/init.d/micrond reload;"
 ```
 
-logread |grep -v "fastd" & logread -f |grep -v "fastd"
-
-cd /var/www/freifunk/firmware/ffki/rc/
-router_ip+=fda1:384a:74de:4242:62e3:27ff:fe2a:67d6;
-
-
 Gluon versions
 ==============
 This branch of the script contains the ssid-changer version for the gluon 
@@ -108,7 +102,7 @@ Create a file "modules" with the following content in your site directory:
 ```
 GLUON_SITE_FEEDS="ssidchanger"
 PACKAGES_SSIDCHANGER_REPO=https://github.com/freifunk-nord/gluon-ssid-changer.git
-PACKAGES_SSIDCHANGER_COMMIT=0e4c3384a51c7359234ae883f00e47b044a0c704 # <-- set the newest commit ID here
+PACKAGES_SSIDCHANGER_COMMIT=cc16f488bd32f17da845279800e06f237884829e # <-- set the newest commit ID here
 PACKAGES_SSIDCHANGER_BRANCH=master
 ```
 
