@@ -90,6 +90,13 @@ ssh $ROUTER_IP "/lib/gluon/upgrade/500-ssid-changer;" \
   "/etc/init.d/micrond reload;"
 ```
 
+Alternative: gluon-ssid-notifier
+================================
+If you just need the Offline-SSID for administrative purposes, there is a better solution,
+that will just add an extra SSID if a node is offline:
+https://github.com/freifunk-kiel/gluon-ssid-notifier/
+
+
 Gluon versions
 ==============
 This branch of the script contains the ssid-changer version for the gluon 
