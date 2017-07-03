@@ -64,7 +64,6 @@ ONLINE_SSID="$(uci -q get wireless.client_radio0.ssid)"
 TMP=/tmp/ssid-changer-count
 if [ ! -f $TMP ]; then echo "0">$TMP; fi
 OFF_COUNT=$(cat $TMP)
-echo "$(($OFF_COUNT + 1))" > $TMP
 
 TQ_LIMIT_ENABLED="$(uci -q get ssid-changer.settings.tq_limit_enabled)"
 # if true, the offline ssid will only be set if there is no gateway reacheable
