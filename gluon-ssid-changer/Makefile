@@ -11,19 +11,19 @@ PKG_CONFIG_DEPENDS += $(GLUON_I18N_CONFIG)
 
 
 define Package/gluon-ssid-changer
-	SECTION:=gluon
-	CATEGORY:=Gluon
-	TITLE:=changes the SSID to an Offline-SSID so clients don't connect to an offline WiFi
-	DEPENDS:=+gluon-core +micrond
+  SECTION:=gluon
+  CATEGORY:=Gluon
+  TITLE:=changes the SSID to an Offline-SSID so clients don't connect to an offline WiFi
+  DEPENDS:=+gluon-core +micrond
 endef
 
 define Package/gluon-ssid-changer/description
-	Script to change the SSID to an Offline-SSID when there is no connection to
-	any gateway. This SSID can be generated from the nodes hostname with the first
-	and last part of the nodename or the mac address, to allow observers to 
-	recognise which node is down. The script is called once a minute by micron.d
-	and it will change from online to offline-SSID maximum once every (definable)
-	timeframe.
+  Script to change the SSID to an Offline-SSID when there is no connection to
+  any gateway. This SSID can be generated from the nodes hostname with the first
+  and last part of the nodename or the mac address, to allow observers to 
+  recognise which node is down. The script is called once a minute by micron.d
+  and it will change from online to offline-SSID maximum once every (definable)
+  timeframe.
 endef
 
 define Build/Prepare
