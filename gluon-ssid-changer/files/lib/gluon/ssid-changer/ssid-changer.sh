@@ -8,7 +8,8 @@ safety_exit() {
 	exit 2
 }
 pgrep -f autoupdater >/dev/null && safety_exit 'autoupdater running'
-[ $(cat /proc/uptime | sed 's/\..*//g') -gt 60 ] || safety_exit 'less than one minute'
+UT=$(sed 's/\..*//g' /proc/uptime)
+[ $UT -gt 60 ] || safety_exit 'less than one minute'
 [ $(find /var/run -name hostapd-phy* | wc -l) -gt 0 ] || safety_exit 'no hostapd-phy*'
 
 # only once every timeframe minutes the SSID will change to the Offline-SSID
@@ -101,7 +102,7 @@ else
 	CHECK="$(batctl gwl -H|grep -v "gateways in range"|wc -l)"
 fi
 
-UP=$(($(cat /proc/uptime | sed 's/\..*//g') / 60))
+UP=$(($UT / 60))
 M=$(($UP % $MINUTES))
 
 HUP_NEEDED=0
