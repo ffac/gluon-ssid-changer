@@ -98,7 +98,7 @@ if [ $TQ_LIMIT_ENABLED = 1 ]; then
 	fi
 else
 	MSG=""
-	CHECK="$(batctl gwl -H|grep -v "gateways in range"|wc -l)"
+	CHECK="$(batctl gwl -H|grep -v "No gateways in range"|wc -l)"
 fi
 
 UP=$(($(cat /proc/uptime | sed 's/\..*//g') / 60))
