@@ -48,7 +48,7 @@ if [ $SETTINGS_SUFFIX = 'nodename' ]; then
 		SUFFIX=${SUFFIX:0:$HALF}...${SUFFIX:$SKIP:${#SUFFIX}}
 	fi
 elif [ $SETTINGS_SUFFIX = 'mac' ]; then
-	SUFFIX="$(uci -q get network.bat0.macaddr)"
+	SUFFIX="$(uci -q get network.bat0.macaddr | /bin/sed 's/://g')"
 else
 	# 'none'
 	SUFFIX=''
