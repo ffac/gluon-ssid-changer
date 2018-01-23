@@ -1,1 +1,2 @@
-config main 'settings'
+config settings 'settings'
+  option enabled '1'
