@@ -58,7 +58,7 @@ OFFLINE_SSID="$PREFIX$SUFFIX"
 
 # if for whatever reason ONLINE_SSID is NULL
 ONLINE_SSID="$(uci -q get wireless.client_radio0.ssid)"
-: ${ONLINE_SSID:="FREIFUNK"}
+: ${ONLINE_SSID:="Freifunk"}
 
 # temp file to count the offline incidents during switch_timeframe
 TMP=/tmp/ssid-changer-count
