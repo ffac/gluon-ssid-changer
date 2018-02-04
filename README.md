@@ -118,6 +118,4 @@ With this done you can add the package `gluon-ssid-changer` to your `site.mk`
 
 History
 =======
-*This is a merge of https://github.com/ffac/gluon-ssid-changer and
-https://github.com/viisauksena/gluon-ssid-changer that doesn't check
-the tx value any more. It is now in use in Freifunk Nord*
+*The Lede Branch of the gluon-ssid-changer contains multible new features created in the fork https://github.com//gluon-ssid-changer and https://github.com/Freifunk-Nord/gluon-ssid-changer.*
