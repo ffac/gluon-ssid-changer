@@ -109,9 +109,9 @@ Create a file "modules" with the following content in your site directory:
 
 ```
 GLUON_SITE_FEEDS="ssidchanger"
-PACKAGES_SSIDCHANGER_REPO=https://github.com/freifunk-nord/gluon-ssid-changer.git
-PACKAGES_SSIDCHANGER_COMMIT=cc16f488bd32f17da845279800e06f237884829e # <-- set the newest commit ID here
-PACKAGES_SSIDCHANGER_BRANCH=master
+PACKAGES_SSIDCHANGER_REPO=https://github.com/ffac/gluon-ssid-changer.git
+PACKAGES_SSIDCHANGER_COMMIT=263d9530ecd29ff9e232bbafd99500c3d47e76fb # <-- set the newest commit ID here
+PACKAGES_SSIDCHANGER_BRANCH=lede
 ```
 
 With this done you can add the package `gluon-ssid-changer` to your `site.mk`
