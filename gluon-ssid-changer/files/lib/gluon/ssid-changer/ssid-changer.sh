@@ -14,12 +14,12 @@ pgrep -f autoupdater >/dev/null && safety_exit 'autoupdater running'
 # only once every timeframe minutes the SSID will change to the Offline-SSID
 # (set to 1 minute to change immediately every time the router gets offline)
 MINUTES="$(uci -q get ssid-changer.settings.switch_timeframe)"
-: ${MINUTES:=30}
+: ${MINUTES:=1}
 
 # the first few minutes directly after reboot within which an Offline-SSID always may be activated
 # (must be <= switch_timeframe)
 FIRST="$(uci -q get ssid-changer.settings.first)"
-: ${FIRST:=5}
+: ${FIRST:=2}
 
 # the Offline-SSID will start with this prefix use something short to leave space for the nodename
 # (no '~' allowed!)
