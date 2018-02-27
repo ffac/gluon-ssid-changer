@@ -1,17 +1,17 @@
 local uci = require('simple-uci').cursor()
 local util = require 'gluon.util'
 
-local f = Form(translate('Offline-SSID'))
+local f = Form(pkg_i18n.translate('Offline-SSID'))
 
-local s = f:section(Section, nil, translate(
+local s = f:section(Section, nil, pkg_i18n.translate(
 	'Here you can enable to automatically change the SSID to the Offline-SSID '
   .. 'when the node has no connection to the selected Gateway.'
 ))
 
-local enabled = s:option(Flag, 'enabled', translate('Enabled'))
+local enabled = s:option(Flag, 'enabled', pkg_i18n.translate('Enabled'))
 enabled.default = uci:get_bool('ssid-changer', 'settings', 'enabled')
 
--- local prefix = s:option(Value, 'prefix', translate('First part of the Offline SSID'))
+-- local prefix = s:option(Value, 'prefix', pkg_i18n.translate('First part of the Offline SSID'))
 -- prefix:depends(enabled, true)
 -- prefix.datatype = 'maxlength(32)'
 -- prefix.default = uci:get('ssid-changer', 'settings', 'prefix')
