@@ -1,6 +1,8 @@
 local uci = require('simple-uci').cursor()
 local util = require 'gluon.util'
 
+local pkg_i18n = i18n 'gluon-ssid-changer'
+
 local f = Form(pkg_i18n.translate('Offline-SSID'))
 
 local s = f:section(Section, nil, pkg_i18n.translate(
