@@ -10,7 +10,7 @@ safety_exit() {
 pgrep -f autoupdater >/dev/null && safety_exit 'autoupdater running'
 [ $(cat /proc/uptime | sed 's/\..*//g') -gt 60 ] || safety_exit 'less than one minute'
 [ $(find /var/run -name hostapd-phy* | wc -l) -gt 0 ] || safety_exit 'no hostapd-phy*'
-	
+
 # only once every timeframe minutes the SSID will change to the Offline-SSID
 # (set to 1 minute to change immediately every time the router gets offline)
 MINUTES="$(uci -q get ssid-changer.settings.switch_timeframe)"
@@ -57,8 +57,8 @@ fi
 OFFLINE_SSID="$PREFIX$SUFFIX"
 
 # if for whatever reason ONLINE_SSID is NULL
-ONLINE_SSID="$(uci -q get wireless.client_radio0.ssid)"
-: ${ONLINE_SSID:="FREIFUNK"}
+ONLINE_SSIDs="$(uci show | grep wireless.client_radio | grep ssid  | awk -F '='  '{print $2}' | sed "s/\\\'/PLATZHALTER/g" | tr \' \~ | sed "s/PLATZHALTER/\\\'/g" ) "
+: ${ONLINE_SSIDs:="~FREIFUNK~"}
 
 # temp file to count the offline incidents during switch_timeframe
 TMP=/tmp/ssid-changer-count
@@ -84,9 +84,9 @@ if [ $TQ_LIMIT_ENABLED = 1 ]; then
 		# there is no gateway
 		GATEWAY_TQ=0
 	fi
-	
+
 	MSG="TQ is $GATEWAY_TQ, "
-	
+
 	if [ $GATEWAY_TQ -ge $TQ_LIMIT_MAX ]; then
 		CHECK=1
 	elif [ $GATEWAY_TQ -lt $TQ_LIMIT_MIN ]; then
@@ -107,8 +107,11 @@ M=$(($UP % $MINUTES))
 HUP_NEEDED=0
 if [ "$CHECK" -gt 0 ] || [ "$DISABLED" = '1' ]; then
 	echo "node is online"
+	LOOP=1
 	# check status for all physical devices
 	for HOSTAPD in $(ls /var/run/hostapd-phy*); do
+		ONLINE_SSID="$(echo $ONLINE_SSIDs | awk -F '~' -v l=$((LOOP*2)) '{print $l}')" 
+		LOOP=$((LOOP+1))
 		CURRENT_SSID="$(grep "^ssid=$ONLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
 		if [ "$CURRENT_SSID" = "$ONLINE_SSID" ]; then
 			echo "SSID $CURRENT_SSID is correct, nothing to do"
@@ -137,7 +140,10 @@ elif [ "$CHECK" -eq 0 ]; then
 		#echo minute $M, check if $OFF_COUNT is more than half of $T 
 		if [ $OFF_COUNT -ge $(($T / 2)) ]; then
 			# node was offline more times than half of switch_timeframe (or than $FIRST)
+			LOOP=1
 			for HOSTAPD in $(ls /var/run/hostapd-phy*); do
+				ONLINE_SSID="$(echo $ONLINE_SSIDs | awk -F '~' -v l=$((LOOP*2)) '{print $l}')" 
+				LOOP=$((LOOP+1))
 				CURRENT_SSID="$(grep "^ssid=$OFFLINE_SSID" $HOSTAPD | cut -d"=" -f2)"
 				if [ "$CURRENT_SSID" = "$OFFLINE_SSID" ]; then
 					echo "SSID $CURRENT_SSID is correct, nothing to do"
