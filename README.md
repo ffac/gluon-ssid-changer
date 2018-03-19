@@ -1,7 +1,9 @@
 gluon-ssid-changer
 ==================
 
-_This branch of the script contains the ssid-changer version for the gluon 2018.1.x branch. For the 2017.1.x release of Gluon use the branch "lede"._
+_This branch of the script contains the ssid-changer version for the gluon 
+2018.1.x branch (current "master"). For older releases of Gluon use the branches
+"2017.1.x" and "2016.2.x"._
 
 This package adds a script to change the SSID to an Offline-SSID when there is
 no connection to any gateway.
