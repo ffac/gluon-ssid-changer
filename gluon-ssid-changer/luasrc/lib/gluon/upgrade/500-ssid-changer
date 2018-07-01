@@ -7,7 +7,7 @@ local uci = require('simple-uci').cursor()
 if site.ssid_changer == nil then
 	-- print('ssid_changer not defined in site.conf')
 elseif not uci:get('ssid-changer', 'settings', 'enabled') then
-	uci:section('ssid-changer', 'main', 'settings', {
+	uci:section('ssid-changer', 'settings', 'settings', {
 		enabled           = '1',
 		switch_timeframe  = site.ssid_changer.switch_timeframe() or '30',
 		first             = site.ssid_changer.first() or '5',
