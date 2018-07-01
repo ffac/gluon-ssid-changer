@@ -9,13 +9,13 @@ if site.ssid_changer == nil then
 elseif not uci:get('ssid-changer', 'settings', 'enabled') then
 	uci:section('ssid-changer', 'main', 'settings', {
 		enabled           = '1',
-		switch_timeframe  = site.ssid_changer.switch_timeframe or '30',
-		first             = site.ssid_changer.first or '5',
-		prefix            = site.ssid_changer.prefix or 'FF_Offline_',
-		suffix            = site.ssid_changer.suffix or 'nodename',
-		tq_limit_enabled  = site.ssid_changer.tq_limit_enabled or false,
-		tq_limit_max      = site.ssid_changer.tq_limit_max or 45,
-		tq_limit_min      = site.ssid_changer.tq_limit_min or 35,
+		switch_timeframe  = site.ssid_changer.switch_timeframe() or '30',
+		first             = site.ssid_changer.first() or '5',
+		prefix            = site.ssid_changer.prefix() or 'FF_Offline_',
+		suffix            = site.ssid_changer.suffix() or 'nodename',
+		tq_limit_enabled  = site.ssid_changer.tq_limit_enabled() or false,
+		tq_limit_max      = site.ssid_changer.tq_limit_max() or 45,
+		tq_limit_min      = site.ssid_changer.tq_limit_min() or 35,
 	})
 	uci:save('ssid-changer')
 end
