@@ -1,18 +1,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gluon-ssid-changer
-PKG_VERSION:=4
-
-PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
+PKG_VERSION:=5
 
 include $(TOPDIR)/../package/gluon.mk
 
-PKG_CONFIG_DEPENDS += $(GLUON_I18N_CONFIG)
-
-
 define Package/$(PKG_NAME)
-  SECTION:=gluon
-  CATEGORY:=Gluon
   TITLE:=changes the SSID to an Offline-SSID so clients don't connect to an offline WiFi
   DEPENDS:=+gluon-core +micrond
 endef
@@ -26,28 +19,18 @@ define Package/$(PKG_NAME)/description
   timeframe.
 endef
 
-define Build/Prepare
-	mkdir -p $(PKG_BUILD_DIR)
-endef
-
-define Build/Configure
-endef
 
 define Build/Compile
-	$(call GluonBuildI18N,$(PKG_NAME),i18n)
-	$(call GluonSrcDiet,./luasrc,$(PKG_BUILD_DIR)/luadest/)
+	$(call Gluon/Build/Compile)
+	./gluonShellDiet.sh shsrc/ssid-changer.sh > $(PKG_BUILD_DIR)/ssid-changer.sh
 endef
 
 define Package/$(PKG_NAME)/install
-	$(CP) ./files/* $(1)/
-	$(CP) $(PKG_BUILD_DIR)/luadest/* $(1)/
-	./gluonShellDiet.sh $(1)/lib/gluon/ssid-changer/ssid-changer.sh
-	$(call GluonInstallI18N,$(PKG_NAME),$(1))
+	$(Gluon/Build/Install)
+
+	$(INSTALL_DIR) $(1)/lib/gluon/ssid-changer
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ssid-changer.sh $(1)/lib/gluon/ssid-changer/
 endef
 
-define Package/$(PKG_NAME)/postinst
-#!/bin/sh
-$(call GluonCheckSite,check_site.lua)
-endef
 
-$(eval $(call BuildPackage,$(PKG_NAME)))
+$(eval $(call BuildPackageGluon,$(PKG_NAME)))
