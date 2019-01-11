@@ -57,8 +57,9 @@ fi
 
 OFFLINE_SSID="$PREFIX$SUFFIX"
 
-# if for whatever reason ONLINE_SSID is NULL
-ONLINE_SSIDs="$(uci show | grep wireless.client_radio | grep ssid  | awk -F '='  '{print $2}' | sed "s/\\\'/PLATZHALTER/g" | tr \' \~ | sed "s/PLATZHALTER/\\\'/g" ) "
+# get all SSIDs (replace \' with TICX and back to keep a possible tic in an SSID)
+ONLINE_SSIDs="$(uci show | grep wireless.client_radio[0-9]\. | grep ssid  | awk -F '='  '{print $2}' | sed "s/\\\'/TICX/g" | tr \' \~ | sed "s/TICX/\\\'/g" ) "
+# if for whatever reason ONLINE_SSIDs is NULL:
 : ${ONLINE_SSIDs:="~FREIFUNK~"}
 
 # temp file to count the offline incidents during switch_timeframe
